@@ -29,6 +29,8 @@ class _CreationCompteState extends State<CreationCompte> {
   String codePostal;
   String ville;
   String telephone;
+  String prenom;
+  String nom;
 
   static const menuItems = <String>[
     'EMPLOYEE',
@@ -73,29 +75,30 @@ class _CreationCompteState extends State<CreationCompte> {
     final provider = Provider.of<UsersService>(context, listen: true);
 
     final providerB = Provider.of<Boutiques>(context);
-    var etat = provider.wheremail(widget.user.email);
-    if (etat == true)
-      return Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(color: Colors.white),
-          child: Center(
-              child: CircularProgressIndicator(
-            backgroundColor: Colors.white,
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
-          )));
-    else
-      users = provider.findById(widget.user.email);
+    // var etat = provider.wheremail(widget.user.email);
+    // print(etat);
+    // if (etat == false)
+    //   return Container(
+    //       height: MediaQuery.of(context).size.height,
+    //       width: MediaQuery.of(context).size.width,
+    //       decoration: BoxDecoration(color: Colors.white),
+    //       child: Center(
+    //           child: CircularProgressIndicator(
+    //         backgroundColor: Colors.white,
+    //         valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+    //       )));
+    // else
+    //   users = provider.findById(widget.user.email);
     // print('//////////////////USER////////////////');
     // print(users.genre);
     // users.genre == null ? print('Aucun Genre') : print('Genre');
-    if (users.genre == OptionGenre.Femme) {
-      genreM = false;
-      genreF = true;
-    } else {
-      genreM = true;
-      genreF = false;
-    }
+    // if (users.genre == OptionGenre.Femme) {
+    //   genreM = false;
+    //   genreF = true;
+    // } else {
+    //   genreM = true;
+    //   genreF = false;
+    // }
 
     // print(widget.user);
     return Scaffold(
@@ -222,10 +225,10 @@ class _CreationCompteState extends State<CreationCompte> {
                                     Expanded(
                                       child: InkWell(
                                         onTap: () {
-                                          // setState(() {
-                                          //   genreF = true;
-                                          //   genreM = false;
-                                          // });
+                                          setState(() {
+                                            genreF = true;
+                                            genreM = false;
+                                          });
                                         },
                                         child: Container(
                                           height: MediaQuery.of(context)
@@ -255,10 +258,10 @@ class _CreationCompteState extends State<CreationCompte> {
                                     Expanded(
                                       child: InkWell(
                                         onTap: () {
-                                          // setState(() {
-                                          //   genreM = true;
-                                          //   genreF = false;
-                                          // });
+                                          setState(() {
+                                            genreM = true;
+                                            genreF = false;
+                                          });
                                         },
                                         child: Container(
                                           height: MediaQuery.of(context)
@@ -307,19 +310,26 @@ class _CreationCompteState extends State<CreationCompte> {
                               width: MediaQuery.of(context).size.width,
                               decoration: BoxDecoration(
                                   border: Border.all(color: Colors.black)),
-                              child: (users.password == "")
-                                  ? Center(
-                                      child: Text(
-                                      users.prenom,
-                                      style: TextStyle(fontSize: 18),
-                                    ))
-                                  : TextFormField(
-                                      decoration: InputDecoration(
-                                        focusedBorder: InputBorder.none,
-                                        border: UnderlineInputBorder(),
-                                      ),
-                                      maxLines: 1,
-                                    ),
+                              child: TextFormField(
+                                validator: (value) {
+                                  return value.isEmpty
+                                      ? 'Titre required'
+                                      : null;
+                                },
+                                onChanged: (String valueTitle) {
+                                  setState(() {
+                                    prenom = valueTitle;
+                                  });
+                                },
+                                onSaved: (newValue) {
+                                  prenom = newValue;
+                                },
+                                decoration: InputDecoration(
+                                  focusedBorder: InputBorder.none,
+                                  border: UnderlineInputBorder(),
+                                ),
+                                maxLines: 1,
+                              ),
                             ),
                           ],
                         ),
@@ -340,19 +350,26 @@ class _CreationCompteState extends State<CreationCompte> {
                               width: MediaQuery.of(context).size.width,
                               decoration: BoxDecoration(
                                   border: Border.all(color: Colors.black)),
-                              child: (users.password == "")
-                                  ? Center(
-                                      child: Text(
-                                      users.nom,
-                                      style: TextStyle(fontSize: 18),
-                                    ))
-                                  : TextFormField(
-                                      decoration: InputDecoration(
-                                        focusedBorder: InputBorder.none,
-                                        border: UnderlineInputBorder(),
-                                      ),
-                                      maxLines: 1,
-                                    ),
+                              child: TextFormField(
+                                validator: (value) {
+                                  return value.isEmpty
+                                      ? 'Titre required'
+                                      : null;
+                                },
+                                onChanged: (String valueTitle) {
+                                  setState(() {
+                                    nom = valueTitle;
+                                  });
+                                },
+                                onSaved: (newValue) {
+                                  nom = newValue;
+                                },
+                                decoration: InputDecoration(
+                                  focusedBorder: InputBorder.none,
+                                  border: UnderlineInputBorder(),
+                                ),
+                                maxLines: 1,
+                              ),
                             ),
                           ],
                         ),
@@ -593,13 +610,13 @@ class _CreationCompteState extends State<CreationCompte> {
                           child: MaterialButton(
                             onPressed: () {
                               provider.addUser(
-                                  email: users.email,
-                                  genre: users.genre,
+                                  email: widget.user.email,
+                                  genre: genreF == true ? 'FEMME' : 'HOMME',
                                   telephone: telephone,
-                                  prenom: users.prenom,
+                                  prenom: prenom,
                                   ville: ville,
                                   type: _btnSelectedVal,
-                                  nom: users.nom);
+                                  nom: nom);
 
                               _btnSelectedVal == "EMPLOYEE"
                                   ? Navigator.push(

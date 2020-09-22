@@ -85,6 +85,95 @@ class Articles with ChangeNotifier {
     }
   }
 
+  Future<bool> deleteArticle(String id) async {
+    final String url =
+        "https://appsecom-839d9.firebaseio.com/productsfinal/$id.json";
+
+    try {
+      /**
+       * Envoie de donnée
+       */
+      var response = await http.delete(url);
+      Map datas = jsonDecode(response.body);
+      return true;
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<bool> update(
+      {String description,
+      String marque,
+      String etat,
+      String titre,
+      String taille,
+      double price,
+      int catId,
+      int souCatId,
+      String userid,
+      Boutique boutique,
+      String id,
+      File sampleImage}) async {
+    final String url =
+        "https://appsecom-839d9.firebaseio.com/productsfinal/$id.json";
+    /**
+       * Envoie de Photo
+       */
+    final StorageReference postImageRef =
+        FirebaseStorage.instance.ref().child("Post Images");
+    var timeKey = DateTime.now();
+    final StorageUploadTask uploadTask =
+        postImageRef.child(timeKey.toString() + ".jpg").putFile(sampleImage);
+
+    var ImageUrl = await (await uploadTask.onComplete).ref.getDownloadURL();
+    String urls = ImageUrl.toString();
+
+    /**
+       * Reception des Donnée du formulaire
+       */
+
+    try {
+      Article products = Article(
+          title: titre,
+          description: description,
+          price: price,
+          etat: etat == 'Neuf' ? Etat.Neuf : Etat.QuasiNeuf,
+          picture: urls,
+          taille: taille,
+          marque: marque,
+          categorie: catId,
+          sousCategorie: souCatId,
+          admin: userid);
+
+      /**
+       * Envoie de donnée
+       */
+      var response = await http.put(url, body: jsonEncode(products.toJson()));
+      Map datas = jsonDecode(response.body);
+      // print('////////////////NAME/**/*/*/*/*/*/*/*/*/*/*');
+      // print(datas['name']);
+
+      //     DatabaseReference databaseReference = FirebaseDatabase.instance.reference();
+
+      // var data = {
+      //   "image": url,
+      //   // "description": _myvalue,
+      //   "time": time,
+      //   "date": date,
+      // };
+      // databaseReference.child('Image').push().set(data);
+
+      // String urlProduct =
+      //     "https://appsecom-839d9.firebaseio.com/productsfinal";
+      // var responseProducts =
+      //     await http.post(urlProduct, body: jsonEncode(products.toJson()));
+      // Map datasProdu = jsonDecode(responseProducts.body);
+      return true;
+    } catch (e) {
+      print(e);
+    }
+  }
+
   List<Article> _productBoutique = [];
   List<Article> get productBoutique {
     // if (_showFavotitesOnly) {

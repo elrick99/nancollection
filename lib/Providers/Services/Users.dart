@@ -37,7 +37,7 @@ class UsersService with ChangeNotifier {
     try {
       var response = await http.post(url, body: json.encode(data));
       print('///////////RESPONSE///////////');
-      print(response.body);
+      // print(response.body);
       var newUser = User(
           id: json.decode(response.body)['nom'],
           prenom: prenom,
@@ -58,10 +58,10 @@ class UsersService with ChangeNotifier {
      */
 
   Future<void> getUser() async {
-    final String url = "https://appsecom-839d9.firebaseio.com/user.json";
+    final String url = "https://appsecom-839d9.firebaseio.com/userfinal.json";
     try {
       var response = await http.get(url);
-      // print(response.body);
+      print(response.body);
       if (response.statusCode == 200) {
         _items = [];
         // print('////////// Insérer dans le provider /////////');
@@ -91,7 +91,7 @@ class UsersService with ChangeNotifier {
    * RECUPERATION D'UN USER
    */
   User findById(String email) {
-    // print(email);
+    print(email);
     return _items.firstWhere((user) => user.email == email);
   }
 

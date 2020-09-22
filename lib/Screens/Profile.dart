@@ -131,8 +131,8 @@ class _ProfilScreenState extends State<ProfilScreen> {
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    final provider = Provider.of<Boutiques>(context);
-    provider.getBoutique();
+    final provider = Provider.of<UsersService>(context);
+    provider.getUser();
     sha();
   }
 
@@ -144,12 +144,24 @@ class _ProfilScreenState extends State<ProfilScreen> {
 
     final providerB = Provider.of<UsersService>(context);
     var etat = providerB.wheremail(widget.user.email);
-    if (etat == true)
-      print('Aucune Boutique');
-    else
+
+    // var type = providerB.wheretype("EMPLOYEE");
+    // print(type);
+    // print(boutique.nom);
+    if (etat == true) {
+      boutique = providerB.findById(widget.user.email);
+    } else
       boutique = providerB.findById(widget.user.email);
 
-    print(boutique.type);
+    if (boutique == null) {
+      return CircularProgressIndicator();
+    }
+
+    // print('aziahzeih');
+    // print(boutique.type);
+    // print("USER");
+    // print(widget.user.email);
+    // print(boutique.type);
     // print(widget.user);
     return Scaffold(
       backgroundColor: Colors.grey[250],
@@ -364,7 +376,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
               ),
             ),
             InkWell(
-              onTap: () => (etat == true)
+              onTap: () => (boutique.type == "EMPLOYEE")
                   ? Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -391,7 +403,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
                         color: Colors.black,
                       ),
                       Text(
-                        (etat == true)
+                        (boutique.type == "EMPLOYEE")
                             ? 'PlateForme Employé'
                             : 'PlateForme Collectionneur',
                         style: TextStyle(

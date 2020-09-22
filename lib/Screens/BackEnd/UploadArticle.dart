@@ -429,7 +429,7 @@ class _UploadPhotoState extends State<UploadPhoto> {
                               onSaved: (newValue) {
                                 _myTaille = newValue;
                               },
-                              keyboardType: TextInputType.number,
+                              keyboardType: TextInputType.text,
                               decoration: InputDecoration(
                                 focusedBorder: InputBorder.none,
                                 border: UnderlineInputBorder(),

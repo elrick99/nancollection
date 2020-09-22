@@ -14,7 +14,11 @@ class _DiscuAdminState extends State<DiscuAdmin> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Discussions'),
+        backgroundColor: Colors.white,
+        title: Text(
+          'Discussions',
+          style: TextStyle(color: Colors.black),
+        ),
       ),
     );
   }

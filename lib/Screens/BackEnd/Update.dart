@@ -10,22 +10,22 @@ import 'package:nantest/Providers/Services/Articles.dart';
 import 'package:nantest/Widgets/BottomBarE.dart';
 import 'package:provider/provider.dart';
 
-class UploadPhoto extends StatefulWidget {
+class UpdateArticle extends StatefulWidget {
   final int categorieId;
-  final int sousCatId;
+  final String idArticle;
   final FirebaseUser user;
 
-  const UploadPhoto({
+  const UpdateArticle({
     Key key,
     this.categorieId,
-    this.sousCatId,
+    this.idArticle,
     this.user,
   }) : super(key: key);
   @override
-  _UploadPhotoState createState() => _UploadPhotoState();
+  _UpdateArticleState createState() => _UpdateArticleState();
 }
 
-class _UploadPhotoState extends State<UploadPhoto> {
+class _UpdateArticleState extends State<UpdateArticle> {
   bool loaded = false;
   bool result = false;
   static const stateItems = <String>[
@@ -87,7 +87,6 @@ class _UploadPhotoState extends State<UploadPhoto> {
       print(_myTaille);
       print(_myTitle);
       print(widget.categorieId);
-      print(widget.sousCatId);
       print(url);
       print('////////////FIN//////////////');
       // Navigator.push(
@@ -130,7 +129,8 @@ class _UploadPhotoState extends State<UploadPhoto> {
 
   @override
   Widget build(BuildContext context) {
-    final dataUpate = Provider.of<Articles>(context);
+    // print(widget.idArticle);
+
     if (result == true)
       return Scaffold(
         body: Container(
@@ -180,379 +180,399 @@ class _UploadPhotoState extends State<UploadPhoto> {
                 child: CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation(Colors.black),
             )))
-        : Scaffold(
-            appBar: AppBar(
-                backgroundColor: Colors.white,
-                iconTheme: IconThemeData(color: Color(0xFF562ec2)),
-                title: Text('enregistrer Photo',
-                    style: TextStyle(color: Colors.black))),
-            body: Center(
-              child: sampleImage == null
-                  ? Text('Select une Image')
-                  : enableUpload(),
-            ),
-            floatingActionButton: sampleImage == null
-                ? FloatingActionButton(
-                    backgroundColor: Colors.black,
-                    tooltip: 'Add Image',
-                    child: Icon(Icons.add),
-                    onPressed: getImage)
-                : null,
-          );
+        : enableUpload();
   }
 
   Widget enableUpload() {
+    final dataUpate = Provider.of<Articles>(context);
+    final data = dataUpate.findById(widget.idArticle);
     final provider = Provider.of<Articles>(context);
-    return Padding(
-      padding: const EdgeInsets.only(top: 18.0),
-      child: Container(
-        child: Form(
-            key: formKey,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Image.file(
-                    sampleImage,
-                    height: MediaQuery.of(context).size.height / 3,
-                    width: MediaQuery.of(context).size.width,
-                  ),
-
-                  SizedBox(
-                    height: 15,
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-                    child: Container(
-                      height: MediaQuery.of(context).size.height / 6,
-                      width: MediaQuery.of(context).size.width,
-                      // decoration: BoxDecoration(color: Colors.red),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            'Titre',
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          Container(
-                            height: MediaQuery.of(context).size.height / 12,
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.black,
+          tooltip: 'Add Image',
+          child: Icon(Icons.image),
+          onPressed: getImage),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 18.0),
+        child: Container(
+          child: Form(
+              key: formKey,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    sampleImage == null
+                        ? Text('')
+                        : Image.file(
+                            sampleImage,
+                            height: MediaQuery.of(context).size.height / 3,
                             width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black)),
-                            child: TextFormField(
-                              validator: (value) {
-                                return value.isEmpty ? 'Titre required' : null;
-                              },
-                              onChanged: (String valueTitle) {
-                                setState(() {
-                                  _myTitle = valueTitle;
-                                });
-                              },
-                              onSaved: (newValue) {
-                                _myTitle = newValue;
-                              },
-                              keyboardType: TextInputType.name,
-                              decoration: InputDecoration(
-                                focusedBorder: InputBorder.none,
-                                border: UnderlineInputBorder(),
-                              ),
-                              maxLines: 1,
-                            ),
                           ),
-                        ],
-                      ),
+
+                    SizedBox(
+                      height: 15,
                     ),
-                  ),
 
-                  SizedBox(
-                    height: 15.0,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-                    child: Container(
-                      height: MediaQuery.of(context).size.height / 4,
-                      width: MediaQuery.of(context).size.width,
-                      // decoration: BoxDecoration(color: Colors.red),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            'Description',
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          Container(
-                            height: MediaQuery.of(context).size.height / 6,
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black)),
-                            child: TextFormField(
-                              validator: (value) {
-                                return value.isEmpty
-                                    ? 'Description required'
-                                    : null;
-                              },
-                              onChanged: (String valueDesc) {
-                                setState(() {
-                                  _myDescription = valueDesc;
-                                });
-                              },
-                              onSaved: (newValue) {
-                                _myDescription = newValue;
-                              },
-                              decoration: InputDecoration(
-                                focusedBorder: InputBorder.none,
-                                border: UnderlineInputBorder(),
-                              ),
-                              maxLines: 5,
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                      child: Container(
+                        height: MediaQuery.of(context).size.height / 6,
+                        width: MediaQuery.of(context).size.width,
+                        // decoration: BoxDecoration(color: Colors.red),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(
+                              'Titre',
+                              style: TextStyle(fontSize: 18),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(
-                    height: 15,
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-                    child: Container(
-                      height: MediaQuery.of(context).size.height / 6,
-                      width: MediaQuery.of(context).size.width,
-                      // decoration: BoxDecoration(color: Colors.red),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            'Marque',
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          Container(
-                            height: MediaQuery.of(context).size.height / 12,
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black)),
-                            child: TextFormField(
-                              validator: (value) {
-                                return value.isEmpty ? 'Marque required' : null;
-                              },
-                              onChanged: (String valueMarque) {
-                                setState(() {
-                                  _myMarque = valueMarque;
-                                });
-                              },
-                              onSaved: (newValue) {
-                                _myMarque = newValue;
-                              },
-                              keyboardType: TextInputType.name,
-                              decoration: InputDecoration(
-                                focusedBorder: InputBorder.none,
-                                border: UnderlineInputBorder(),
-                              ),
-                              maxLines: 1,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(
-                    height: 15,
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-                    child: Container(
-                      height: MediaQuery.of(context).size.height / 6,
-                      width: MediaQuery.of(context).size.width,
-                      // decoration: BoxDecoration(color: Colors.red),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            'Etat',
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          Container(
-                            height: MediaQuery.of(context).size.height / 12,
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(),
-                            child: DropdownButton<String>(
-                                isExpanded: true,
-                                value: _btnSelectedVal,
-                                onChanged: (String newValue) {
+                            Container(
+                              height: MediaQuery.of(context).size.height / 12,
+                              width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black)),
+                              child: TextFormField(
+                                validator: (value) {
+                                  return value.isEmpty
+                                      ? 'Titre required'
+                                      : null;
+                                },
+                                onChanged: (String valueTitle) {
                                   setState(() {
-                                    _btnSelectedVal = newValue;
-                                    print(_btnSelectedVal);
+                                    _myTitle = valueTitle;
                                   });
                                 },
-                                items: this._dropDownMenuItems),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(
-                    height: 15,
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-                    child: Container(
-                      height: MediaQuery.of(context).size.height / 6,
-                      width: MediaQuery.of(context).size.width,
-                      // decoration: BoxDecoration(color: Colors.red),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            'Taille',
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          Container(
-                            height: MediaQuery.of(context).size.height / 12,
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black)),
-                            child: TextFormField(
-                              validator: (value) {
-                                return value.isEmpty ? 'Marque required' : null;
-                              },
-                              onChanged: (String valueTaille) {
-                                setState(() {
-                                  _myTaille = valueTaille;
-                                });
-                              },
-                              onSaved: (newValue) {
-                                _myTaille = newValue;
-                              },
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
-                                focusedBorder: InputBorder.none,
-                                border: UnderlineInputBorder(),
+                                onSaved: (newValue) {
+                                  _myTitle = newValue;
+                                },
+                                keyboardType: TextInputType.name,
+                                decoration: InputDecoration(
+                                  hintText: data.title,
+                                  focusedBorder: InputBorder.none,
+                                  border: UnderlineInputBorder(),
+                                ),
+                                maxLines: 1,
                               ),
-                              maxLines: 1,
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
 
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-                    child: Container(
-                      height: MediaQuery.of(context).size.height / 6,
-                      width: MediaQuery.of(context).size.width,
-                      // decoration: BoxDecoration(color: Colors.red),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            'Prix',
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          Container(
-                            height: MediaQuery.of(context).size.height / 12,
-                            width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black)),
-                            child: TextFormField(
-                              validator: (value) {
-                                return value.isEmpty ? 'Marque required' : null;
-                              },
-                              onChanged: (String valuePrice) {
-                                setState(() {
-                                  _myPrice = valuePrice;
-                                });
-                              },
-                              onSaved: (newValue) {
-                                _myPrice = newValue;
-                              },
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
-                                focusedBorder: InputBorder.none,
-                                border: UnderlineInputBorder(),
+                    SizedBox(
+                      height: 15.0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                      child: Container(
+                        height: MediaQuery.of(context).size.height / 4,
+                        width: MediaQuery.of(context).size.width,
+                        // decoration: BoxDecoration(color: Colors.red),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(
+                              'Description',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            Container(
+                              height: MediaQuery.of(context).size.height / 6,
+                              width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black)),
+                              child: TextFormField(
+                                validator: (value) {
+                                  return value.isEmpty
+                                      ? 'Description required'
+                                      : null;
+                                },
+                                onChanged: (String valueDesc) {
+                                  setState(() {
+                                    _myDescription = valueDesc;
+                                  });
+                                },
+                                onSaved: (newValue) {
+                                  _myDescription = newValue;
+                                },
+                                decoration: InputDecoration(
+                                  hintText: data.description,
+                                  focusedBorder: InputBorder.none,
+                                  border: UnderlineInputBorder(),
+                                ),
+                                maxLines: 5,
                               ),
-                              maxLines: 1,
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  // Padding(
-                  //   padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                  //   child: TextFormField(
-                  //     decoration: InputDecoration(
-                  //       labelText: 'Description',
-                  //     ),
-                  //     validator: (value) {
-                  //       return value.isEmpty ? 'Description required' : null;
-                  //     },
-                  //     onSaved: (newValue) {
-                  //       _myvalue = newValue;
-                  //     },
-                  //   ),
-                  // ),
 
-                  SizedBox(
-                    height: 15.0,
-                  ),
-                  RaisedButton(
-                      child: Text('Valider'),
-                      textColor: Colors.white,
-                      color: Colors.black,
-                      elevation: 10.0,
-                      onPressed: () async {
-                        if (validateSaved()) {
-                          setState(() {
-                            loaded = true;
-                          });
-                          provider
-                              .postProducts(
-                                  catId: widget.categorieId,
-                                  description: _myDescription,
-                                  etat: _btnSelectedVal,
-                                  marque: _myMarque,
-                                  price: double.parse(_myPrice),
-                                  sampleImage: sampleImage,
-                                  souCatId: widget.sousCatId,
-                                  taille: _myTaille,
-                                  titre: _myTitle,
-                                  userid: widget.user.email)
-                              .then((value) {
-                            if (value == true) {
-                              setState(() {
-                                loaded = false;
-                                result = true;
-                              });
-                              // Navigator.pop(context);
-                            }
-                          });
-                          // print('////////////DEBUT//////////////');
-                          // print(_myDescription);
-                          // print(_myMarque);
-                          // print(_myPrice);
-                          // print(_btnSelectedVal);
-                          // print(_myTaille);
-                          // print(_myTitle);
-                          // print(widget.categorieId);
-                          // print(widget.sousCatId);
-                          // print(url);
-                          // print('////////////FIN//////////////');
-                        }
-                      })
-                ],
-              ),
-            )),
+                    SizedBox(
+                      height: 15,
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                      child: Container(
+                        height: MediaQuery.of(context).size.height / 6,
+                        width: MediaQuery.of(context).size.width,
+                        // decoration: BoxDecoration(color: Colors.red),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(
+                              'Marque',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            Container(
+                              height: MediaQuery.of(context).size.height / 12,
+                              width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black)),
+                              child: TextFormField(
+                                validator: (value) {
+                                  return value.isEmpty
+                                      ? 'Marque required'
+                                      : null;
+                                },
+                                onChanged: (String valueMarque) {
+                                  setState(() {
+                                    _myMarque = valueMarque;
+                                  });
+                                },
+                                onSaved: (newValue) {
+                                  _myMarque = newValue;
+                                },
+                                keyboardType: TextInputType.name,
+                                decoration: InputDecoration(
+                                  hintText: data.marque,
+                                  focusedBorder: InputBorder.none,
+                                  border: UnderlineInputBorder(),
+                                ),
+                                maxLines: 1,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(
+                      height: 15,
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                      child: Container(
+                        height: MediaQuery.of(context).size.height / 6,
+                        width: MediaQuery.of(context).size.width,
+                        // decoration: BoxDecoration(color: Colors.red),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(
+                              'Etat',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            Container(
+                              height: MediaQuery.of(context).size.height / 12,
+                              width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(),
+                              child: DropdownButton<String>(
+                                  isExpanded: true,
+                                  value: _btnSelectedVal,
+                                  onChanged: (String newValue) {
+                                    setState(() {
+                                      _btnSelectedVal = newValue;
+                                      print(_btnSelectedVal);
+                                    });
+                                  },
+                                  items: this._dropDownMenuItems),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(
+                      height: 15,
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                      child: Container(
+                        height: MediaQuery.of(context).size.height / 6,
+                        width: MediaQuery.of(context).size.width,
+                        // decoration: BoxDecoration(color: Colors.red),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(
+                              'Taille',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            Container(
+                              height: MediaQuery.of(context).size.height / 12,
+                              width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black)),
+                              child: TextFormField(
+                                validator: (value) {
+                                  return value.isEmpty
+                                      ? 'Marque required'
+                                      : null;
+                                },
+                                onChanged: (String valueTaille) {
+                                  setState(() {
+                                    _myTaille = valueTaille;
+                                  });
+                                },
+                                onSaved: (newValue) {
+                                  _myTaille = newValue;
+                                },
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                  hintText: data.taille,
+                                  focusedBorder: InputBorder.none,
+                                  border: UnderlineInputBorder(),
+                                ),
+                                maxLines: 1,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                      child: Container(
+                        height: MediaQuery.of(context).size.height / 6,
+                        width: MediaQuery.of(context).size.width,
+                        // decoration: BoxDecoration(color: Colors.red),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(
+                              'Prix',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            Container(
+                              height: MediaQuery.of(context).size.height / 12,
+                              width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black)),
+                              child: TextFormField(
+                                validator: (value) {
+                                  return value.isEmpty
+                                      ? 'Marque required'
+                                      : null;
+                                },
+                                onChanged: (String valuePrice) {
+                                  setState(() {
+                                    _myPrice = valuePrice;
+                                  });
+                                },
+                                onSaved: (newValue) {
+                                  _myPrice = newValue;
+                                },
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                  hintText: data.price.toString(),
+                                  focusedBorder: InputBorder.none,
+                                  border: UnderlineInputBorder(),
+                                ),
+                                maxLines: 1,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                    //   child: TextFormField(
+                    //     decoration: InputDecoration(
+                    //       labelText: 'Description',
+                    //     ),
+                    //     validator: (value) {
+                    //       return value.isEmpty ? 'Description required' : null;
+                    //     },
+                    //     onSaved: (newValue) {
+                    //       _myvalue = newValue;
+                    //     },
+                    //   ),
+                    // ),
+
+                    SizedBox(
+                      height: 15.0,
+                    ),
+                    RaisedButton(
+                        child: Text('Valider'),
+                        textColor: Colors.white,
+                        color: Colors.black,
+                        elevation: 10.0,
+                        onPressed: () async {
+                          if (validateSaved()) {
+                            setState(() {
+                              loaded = true;
+                            });
+                            provider
+                                .update(
+                                    id: widget.idArticle,
+                                    catId: widget.categorieId,
+                                    description: _myDescription == null
+                                        ? data.description
+                                        : _myDescription,
+                                    etat: _btnSelectedVal == null
+                                        ? data.etat
+                                        : _btnSelectedVal,
+                                    marque: _myMarque == null
+                                        ? data.marque
+                                        : _myMarque,
+                                    price: double.parse(_myPrice) == null
+                                        ? data.price
+                                        : double.parse(_myPrice),
+                                    sampleImage: sampleImage == null
+                                        ? data.picture
+                                        : sampleImage,
+                                    taille: _myTaille == null
+                                        ? data.taille
+                                        : _myTaille,
+                                    titre: _myTitle == null
+                                        ? data.title
+                                        : _myTitle,
+                                    userid: widget.user.email)
+                                .then((value) {
+                              if (value == true) {
+                                setState(() {
+                                  loaded = false;
+                                  result = true;
+                                });
+                                // Navigator.pop(context);
+                              }
+                            });
+                            // print('////////////DEBUT//////////////');
+                            // print(_myDescription);
+                            // print(_myMarque);
+                            // print(_myPrice);
+                            // print(_btnSelectedVal);
+                            // print(_myTaille);
+                            // print(_myTitle);
+                            // print(widget.categorieId);
+                            // print(widget.sousCatId);
+                            // print(url);
+                            // print('////////////FIN//////////////');
+                          }
+                        })
+                  ],
+                ),
+              )),
+        ),
       ),
     );
   }

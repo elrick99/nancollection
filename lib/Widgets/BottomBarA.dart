@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:nantest/Providers/Services/Articles.dart';
 import 'package:nantest/Screens/BackEnd/AjoutArticle.dart';
 import 'package:nantest/Screens/BackEnd/ArticleList.dart';
+import 'package:nantest/Screens/BackEnd/ArticleListA.dart';
 import 'package:nantest/Screens/BackEnd/Discussions.dart';
 import 'package:nantest/Screens/BackEnd/HomeA.dart';
 import 'package:nantest/Widgets/Badge.dart';
@@ -25,12 +26,12 @@ class _BottomBarAState extends State<BottomBarA> {
       HomeA(
         user: myUser,
       ),
-      ArticleListAdmin(
+      ArticleListA(
         user: myUser,
       ),
-      DiscuAdmin(
-        user: myUser,
-      ),
+      // DiscuAdmin(
+      //   user: myUser,
+      // ),
     ];
   }
 
@@ -85,12 +86,12 @@ class _BottomBarAState extends State<BottomBarA> {
             //       color: (_index == 3) ? Colors.white : Colors.black,
             //     ),
             //     title: ''),
-            FloatingNavbarItem(
-                icon: Icon(
-                  Icons.message,
-                  color: (_index == 2) ? Colors.white : Colors.black,
-                ),
-                title: ''),
+            // FloatingNavbarItem(
+            //     icon: Icon(
+            //       Icons.message,
+            //       color: (_index == 2) ? Colors.white : Colors.black,
+            //     ),
+            //     title: ''),
           ],
         ),
       ),

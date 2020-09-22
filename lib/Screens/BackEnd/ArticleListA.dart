@@ -5,14 +5,16 @@ import 'package:nantest/Providers/Services/Articles.dart';
 import 'package:nantest/Screens/BackEnd/Update.dart';
 import 'package:provider/provider.dart';
 
-class ArticleListAdmin extends StatefulWidget {
+import 'Discussions.dart';
+
+class ArticleListA extends StatefulWidget {
   final FirebaseUser user;
-  const ArticleListAdmin({Key key, this.user}) : super(key: key);
+  const ArticleListA({Key key, this.user}) : super(key: key);
   @override
-  _ArticleListAdminState createState() => _ArticleListAdminState();
+  _ArticleListAState createState() => _ArticleListAState();
 }
 
-class _ArticleListAdminState extends State<ArticleListAdmin> {
+class _ArticleListAState extends State<ArticleListA> {
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
@@ -97,11 +99,14 @@ class _ArticleListAdminState extends State<ArticleListAdmin> {
                                             children: [
                                               IconButton(
                                                 onPressed: () {
-                                                  providerArticle.deleteArticle(
-                                                      dataProduct[index].code);
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (_) =>
+                                                              DiscuAdmin()));
                                                 },
                                                 icon: Icon(
-                                                  Icons.delete,
+                                                  Icons.message,
                                                   color: Colors.white,
                                                 ),
                                               ),
