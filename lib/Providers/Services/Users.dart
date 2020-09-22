@@ -32,7 +32,7 @@ class UsersService with ChangeNotifier {
       "Ville": ville,
       "Telephone": telephone
     };
-    print(data);
+    // print(data);
 
     try {
       var response = await http.post(url, body: json.encode(data));

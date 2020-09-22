@@ -6,6 +6,8 @@ import 'package:nantest/Providers/Services/Users.dart';
 import 'package:nantest/Screens/HomePage.dart';
 import 'package:provider/provider.dart';
 
+import 'Providers/Services/Chats.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -26,6 +28,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider.value(
           value: Categories(),
+        ),
+        ChangeNotifierProvider.value(
+          value: Chats(),
         ),
       ],
       child: MaterialApp(

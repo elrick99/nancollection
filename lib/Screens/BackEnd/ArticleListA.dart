@@ -50,14 +50,14 @@ class _ArticleListAState extends State<ArticleListA> {
                         ? const EdgeInsets.only(top: 10.0)
                         : const EdgeInsets.only(top: 30.0),
                     child: InkWell(
-                      onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => UpdateArticle(
-                                    user: widget.user,
-                                    categorieId: dataProduct[index].categorie,
-                                    idArticle: dataProduct[index].code,
-                                  ))),
+                      // onTap: () => Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (_) => UpdateArticle(
+                      //               user: widget.user,
+                      //               categorieId: dataProduct[index].categorie,
+                      //               idArticle: dataProduct[index].code,
+                      //             ))),
                       child: Container(
                           decoration: BoxDecoration(
                               image: DecorationImage(
@@ -103,7 +103,13 @@ class _ArticleListAState extends State<ArticleListA> {
                                                       context,
                                                       MaterialPageRoute(
                                                           builder: (_) =>
-                                                              DiscuAdmin()));
+                                                              DiscuAdmin(
+                                                                user:
+                                                                    widget.user,
+                                                                product:
+                                                                    dataProduct[
+                                                                        index],
+                                                              )));
                                                 },
                                                 icon: Icon(
                                                   Icons.message,

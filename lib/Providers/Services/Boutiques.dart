@@ -25,7 +25,7 @@ class Boutiques with ChangeNotifier {
       'ville': user.ville,
       'telephone': user.telnumber
     };
-    print(data);
+    // print(data);
     final String url = "https://appsecom-839d9.firebaseio.com/boutique.json";
 
     try {
@@ -124,7 +124,7 @@ class Boutiques with ChangeNotifier {
       'categorie': product.categorie,
       'sousCategorie': product.sousCategorie,
     };
-    print(data);
+    // print(data);
     final String url = "https://appsecom-839d9.firebaseio.com/boutique.json";
 
     try {
