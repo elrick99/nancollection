@@ -62,6 +62,7 @@ class _HomePageState extends State<HomePage> {
             leading: IconButton(
                 icon: Icon(
                   Icons.person_pin,
+                  color:Colors.orange
                 ),
                 onPressed: () {
                   Navigator.push(
@@ -102,20 +103,20 @@ class _HomePageState extends State<HomePage> {
                   // Navigator.push(
                   //     context, MaterialPageRoute(builder: (_) => SearchBar()));
                 },
-                child: Card(
-                  child: Container(
-                      height: 40,
-                      width: 200,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Center(
-                        child: Text(
-                          "Essayez<La creation de nath>",
-                          style: TextStyle(fontSize: 13),
-                        ),
-                      )),
-                ),
+                // child: Card(
+                //   child: Container(
+                //       height: 40,
+                //       width: 200,
+                //       decoration: BoxDecoration(
+                //           color: Colors.white,
+                //           borderRadius: BorderRadius.circular(10)),
+                //       child: Center(
+                //         child: Text(
+                //           "Essayez<La creation de nath>",
+                //           style: TextStyle(fontSize: 13),
+                //         ),
+                //       )),
+                // ),
               ),
               background: Image(
                 image: AssetImage("assets/images/fond.jpg"),
