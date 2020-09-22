@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               background: Image(
-                image: AssetImage("assets/images/style.jpg"),
+                image: AssetImage("assets/images/fond.jpg"),
                 fit: BoxFit.cover,
               ),
               // background: Image.network(
