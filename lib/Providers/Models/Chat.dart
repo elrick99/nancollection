@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 class Chat with ChangeNotifier {
-  final String id;
+  final int id;
   final String code;
   final String message;
   final String dateTime;

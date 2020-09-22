@@ -26,18 +26,18 @@ class _DiscuAdminState extends State<DiscuAdmin> {
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    final providerchat = Provider.of<Chats>(context);
+    final providerchat = Provider.of<Chats>(context, listen: false);
     providerchat.getChat(id: widget.product.code);
   }
 
   @override
   Widget build(BuildContext context) {
-    print(widget.product.code);
+    // print(widget.product.code);
     final providerchat = Provider.of<Chats>(context);
     final datachat = providerchat.items;
 
     print('//////////CHAT/////////');
-    print(datachat[0].message);
+    print(datachat.length);
     return Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(color: Color(0xFF562ec2)),
@@ -57,15 +57,39 @@ class _DiscuAdminState extends State<DiscuAdmin> {
             Expanded(
                 child: Padding(
               padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-              child: ListView(children: [
-                getSenderView(
-                    ChatBubbleClipper5(type: BubbleType.sendBubble), context),
-                getReceiverView(
-                    ChatBubbleClipper5(type: BubbleType.receiverBubble),
-                    context),
-                getSenderView(
-                    ChatBubbleClipper5(type: BubbleType.sendBubble), context),
-              ]),
+              child: ListView.builder(
+                  itemCount: datachat.length,
+                  itemBuilder: (context, index) {
+                    // return Text('data');
+                    // print("qfsdsfsdfsdfsd");
+                    // print(datachat[index].collectionneur);
+                    // if (datachat[index].collectionneur.toString() == '1') {
+                    //   return getSenderView(
+                    //       ChatBubbleClipper5(type: BubbleType.sendBubble),
+                    //       context);
+                    // } else {
+                    //   getReceiverView(
+                    //       ChatBubbleClipper5(type: BubbleType.receiverBubble),
+                    //       context);
+                    // }
+                    return datachat[index].collectionneur.toString() == '1'
+                        ? getSenderView(
+                            ChatBubbleClipper5(type: BubbleType.sendBubble),
+                            context,
+                            text: datachat[index].message,
+                            heure: datachat[index]
+                                .dateTime
+                                .split(' ')[1]
+                                .split('.')[0])
+                        : getReceiverView(
+                            ChatBubbleClipper5(type: BubbleType.receiverBubble),
+                            context,
+                            text: datachat[index].message,
+                            heure: datachat[index]
+                                .dateTime
+                                .split(' ')[1]
+                                .split('.')[0]);
+                  }),
             )),
             Container(
               // color: Colors.grey,
@@ -90,18 +114,13 @@ class _DiscuAdminState extends State<DiscuAdmin> {
                         },
                         autofocus: false,
                         decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: "Tapez message",
-                            prefixIcon: Icon(
-                              Icons.mood,
-                              color: Color(0xFF562ec2),
-                            ),
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                Icons.camera_alt,
-                                color: Color(0xFF562ec2),
-                              ),
-                            )),
+                          border: InputBorder.none,
+                          hintText: "Tapez message",
+                          prefixIcon: Icon(
+                            Icons.mood,
+                            color: Color(0xFF562ec2),
+                          ),
+                        ),
                       )),
                   SizedBox(width: 10),
                   CircleAvatar(
@@ -127,7 +146,9 @@ class _DiscuAdminState extends State<DiscuAdmin> {
         ));
   }
 
-  getSenderView(CustomClipper clipper, BuildContext context) => ChatBubble(
+  getSenderView(CustomClipper clipper, BuildContext context,
+          {String text, heure}) =>
+      ChatBubble(
         clipper: clipper,
         alignment: Alignment.topRight,
         margin: EdgeInsets.only(top: 20),
@@ -137,10 +158,14 @@ class _DiscuAdminState extends State<DiscuAdmin> {
             maxWidth: MediaQuery.of(context).size.width * 0.7,
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                style: TextStyle(color: Colors.white),
+                text,
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  color: Colors.white,
+                ),
               ),
               SizedBox(
                 height: 5,
@@ -149,7 +174,7 @@ class _DiscuAdminState extends State<DiscuAdmin> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    '14h11 min',
+                    heure,
                     style: TextStyle(color: Colors.white, fontSize: 10),
                   ),
                 ],
@@ -159,7 +184,9 @@ class _DiscuAdminState extends State<DiscuAdmin> {
         ),
       );
 
-  getReceiverView(CustomClipper clipper, BuildContext context) => ChatBubble(
+  getReceiverView(CustomClipper clipper, BuildContext context,
+          {String text, heure}) =>
+      ChatBubble(
         clipper: clipper,
         backGroundColor: Color(0xffE7E7ED),
         margin: EdgeInsets.only(top: 20),
@@ -168,9 +195,10 @@ class _DiscuAdminState extends State<DiscuAdmin> {
             maxWidth: MediaQuery.of(context).size.width * 0.7,
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
+                text,
                 style: TextStyle(color: Colors.black),
               ),
               SizedBox(
@@ -180,7 +208,7 @@ class _DiscuAdminState extends State<DiscuAdmin> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    '14h11 min',
+                    heure,
                     style: TextStyle(color: Colors.black, fontSize: 10),
                   ),
                 ],

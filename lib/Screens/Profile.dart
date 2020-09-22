@@ -147,11 +147,11 @@ class _ProfilScreenState extends State<ProfilScreen> {
 
     // var type = providerB.wheretype("EMPLOYEE");
     // print(type);
-    // print(boutique.nom);
+
     if (etat == true) {
-      boutique = providerB.findById(widget.user.email);
+      boutique = providerB?.findById(widget.user.email);
     } else
-      boutique = providerB.findById(widget.user.email);
+      boutique = providerB?.findById(widget.user.email);
 
     if (boutique == null) {
       return CircularProgressIndicator();

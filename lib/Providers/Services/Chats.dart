@@ -58,17 +58,17 @@ class Chats with ChangeNotifier {
         });
         // print(keys);
         int i = 0;
-        produits.forEach((key, value) {
+        data.forEach((key, value) {
           i++;
           int a = i - 1;
 
           // print(a);
           _items.add(Chat(
-            id: a.toString(),
+            id: a,
             code: keys[a],
-            collectionneur: value['collectionneur'],
-            employe: value['employe'],
-            dateTime: value['dateTime'],
+            collectionneur: value['collectionneur'].toString(),
+            employe: value['employe'].toString(),
+            dateTime: value['dateTime'].toString(),
             message: value['message'],
           ));
           // print(value['admin']);
