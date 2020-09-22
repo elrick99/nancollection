@@ -21,12 +21,23 @@ class DiscuAdmin extends StatefulWidget {
 class _DiscuAdminState extends State<DiscuAdmin> {
   String _discu;
   Article article;
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    final providerchat = Provider.of<Chats>(context);
+    providerchat.getChat(id: widget.product.code);
+  }
+
   @override
   Widget build(BuildContext context) {
     print(widget.product.code);
     final providerchat = Provider.of<Chats>(context);
-    final providerart = Provider.of<Articles>(context);
-    article = providerart.findById(widget.product.code);
+    final datachat = providerchat.items;
+
+    print('//////////CHAT/////////');
+    print(datachat[0].message);
     return Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(color: Color(0xFF562ec2)),

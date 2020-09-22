@@ -61,7 +61,7 @@ class UsersService with ChangeNotifier {
     final String url = "https://appsecom-839d9.firebaseio.com/userfinal.json";
     try {
       var response = await http.get(url);
-      print(response.body);
+      // print(response.body);
       if (response.statusCode == 200) {
         _items = [];
         // print('////////// Insérer dans le provider /////////');

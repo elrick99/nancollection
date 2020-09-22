@@ -39,4 +39,45 @@ class Chats with ChangeNotifier {
       print(e);
     }
   }
+
+  Future<void> getChat({String id}) async {
+    final String url = "https://appsecom-839d9.firebaseio.com/chat/$id.json";
+    try {
+      var response = await http.get(url);
+      // print(response.body);
+      if (response.statusCode == 200) {
+        _items = [];
+        // print('////////// Insérer dans le provider /////////');
+        Map<String, dynamic> data = json.decode(response.body);
+        Map<String, dynamic> produits = {};
+        List<String> keys = [];
+        data.forEach((key1, value) {
+          produits.addAll(value);
+          keys.add(key1);
+          // print(key1);
+        });
+        // print(keys);
+        int i = 0;
+        produits.forEach((key, value) {
+          i++;
+          int a = i - 1;
+
+          // print(a);
+          _items.add(Chat(
+            id: a.toString(),
+            code: keys[a],
+            collectionneur: value['collectionneur'],
+            employe: value['employe'],
+            dateTime: value['dateTime'],
+            message: value['message'],
+          ));
+          // print(value['admin']);
+        });
+        // print('////////// Fin Insertion dans le provider /////////');
+        notifyListeners();
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 }
